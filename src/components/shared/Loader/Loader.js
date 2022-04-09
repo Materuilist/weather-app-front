@@ -3,9 +3,9 @@ import React from "react";
 const Loader = ({ isLoading }) => {
   return (
     isLoading && (
-      <button class="center-absolute btn btn-info" type="button" disabled>
+      <button className="center-absolute btn btn-info" type="button" disabled>
         <span
-          class="spinner-grow spinner-grow-sm"
+          className="spinner-grow spinner-grow-sm"
           role="status"
           aria-hidden="true"
         ></span>

@@ -1,9 +1,16 @@
-import { RESPONSE_STATUSES, USER_TOKEN_KEY } from "../constants";
+import {
+  ALERT_TYPES,
+  DEFAULT_ERROR_MESSAGE,
+  RESPONSE_STATUSES,
+  USER_TOKEN_KEY,
+} from "../constants";
+import { store } from "../store";
+import * as alertsActions from "../store/actions/alerts-actions";
 
 class BaseService {
   baseUrl = "http://localhost:8000/api/";
 
-  async request(url, options, responseFormat = "json") {
+  async request(url, options, responseFormat = "json", showAlert = true) {
     const res = await fetch(`${this.baseUrl}${url}`, {
       ...options,
       headers: {
@@ -13,6 +20,15 @@ class BaseService {
     });
 
     const resBody = await res[responseFormat]();
+
+    if (showAlert && ![200, 201].includes(res.status)) {
+      store.dispatch(
+        alertsActions.showAlert(
+          resBody.message || DEFAULT_ERROR_MESSAGE,
+          ALERT_TYPES.ERROR
+        )
+      );
+    }
 
     switch (res.status) {
       case 200:

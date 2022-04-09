@@ -20,18 +20,18 @@ function App({ user, authActions }) {
       <Loader isLoading={isLoading} />
       {!isLoading && (
         <Switch>
-          <Route path={ROUTES_URLS.LOGIN}>
+          <Route path={ROUTES_URLS.LOGIN} exact>
             <Auth />
           </Route>
-          <Route path={ROUTES_URLS.REGISTER}>
+          <Route path={ROUTES_URLS.REGISTER} exact>
             <Auth isRegister={true} />
           </Route>
 
-          <Route path={ROUTES_URLS.DESIGN}>
+          <Route path={ROUTES_URLS.DESIGN} exact>
             <Designer />
           </Route>
 
-          <Redirect to={ROUTES_URLS.LOGIN} />
+          <Redirect to={ROUTES_URLS.DESIGN} />
         </Switch>
       )}
     </div>

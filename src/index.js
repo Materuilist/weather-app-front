@@ -8,7 +8,7 @@ import { store, history } from "./store/index";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.scss";
-import "./bootstrap-additions.scss";
+import "./styles/bootstrap-additions.scss";
 
 ReactDOM.render(
   <Provider store={store}>

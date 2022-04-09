@@ -1,0 +1,15 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/mixins";
+
+$lightBlue: #dceef4;
+$primary: #2baeda;
+
+$theme-colors: (
+  "primary": $primary,
+);
+
+@import "../node_modules/bootstrap/scss/variables";
+
+:export {
+  primary: $primary;
+}

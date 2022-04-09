@@ -18,3 +18,13 @@ export const RESPONSE_STATUSES = {
   BACKEND_ERROR: "BACKEND_ERROR",
   FRONTEND_ERROR: "FRONTEND_ERROR",
 };
+
+export const ALERT_TYPES = {
+  SUCCESS: "success",
+  ERROR: "error",
+  INFO: "info",
+};
+
+export const ALERT_VISIBILITY_TIME = 5000;
+
+export const DEFAULT_ERROR_MESSAGE = "An error happened. Sorry...";
