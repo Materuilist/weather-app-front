@@ -3,11 +3,12 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 
-import App from "./App";
+import App from "./components/App";
 import { store, history } from "./store/index";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.scss";
+import "./bootstrap-additions.scss";
 
 ReactDOM.render(
   <Provider store={store}>
