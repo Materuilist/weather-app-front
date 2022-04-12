@@ -11,5 +11,5 @@ $theme-colors: (
 @import "../node_modules/bootstrap/scss/variables";
 
 :export {
-  primary: $primary;
+  primaryColor: $primary;
 }

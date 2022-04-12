@@ -8,6 +8,8 @@ import Auth from "./pages/auth/Auth";
 import Designer from "./pages/designer/Designer";
 import Loader from "./shared/Loader/Loader";
 
+import "./app.scss";
+
 function App({ user, authActions }) {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,11 +29,11 @@ function App({ user, authActions }) {
             <Auth isRegister={true} />
           </Route>
 
-          <Route path={ROUTES_URLS.DESIGN} exact>
+          <Route path={ROUTES_URLS.DESIGN}>
             <Designer />
           </Route>
 
-          <Redirect to={ROUTES_URLS.DESIGN} />
+          <Redirect from="*" to={ROUTES_URLS.DESIGN} />
         </Switch>
       )}
     </div>

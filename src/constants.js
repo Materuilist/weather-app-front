@@ -28,3 +28,12 @@ export const ALERT_TYPES = {
 export const ALERT_VISIBILITY_TIME = 5000;
 
 export const DEFAULT_ERROR_MESSAGE = "An error happened. Sorry...";
+
+export const BODY_PARTS = {
+  HEAD: 1,
+  BODY: 2,
+  LEG: 3,
+  NECK: 4,
+  FOOT: 5,
+  HAND: 6,
+};

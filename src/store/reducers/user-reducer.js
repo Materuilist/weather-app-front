@@ -1,4 +1,4 @@
-import { USER_ACTION_TYPES } from "../action-types";
+import { SHARED_ACTION_TYPES, USER_ACTION_TYPES } from "../action-types";
 
 const initialState = {
   login: null,
@@ -15,6 +15,8 @@ const userReducer = (state = initialState, action) => {
         role: action.role,
         sex: action.sex,
       };
+    case SHARED_ACTION_TYPES.RESET_STORE:
+      return initialState;
     default:
       return state;
   }

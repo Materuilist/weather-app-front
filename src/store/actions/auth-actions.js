@@ -6,6 +6,7 @@ import {
 import AuthService from "../../services/auth-service";
 import { USER_ACTION_TYPES } from "../action-types";
 import { history } from "../index";
+import { resetStore } from "./shared-actions";
 
 const authService = new AuthService();
 
@@ -51,3 +52,11 @@ export const authorize =
       cb?.();
     }
   };
+
+export const logOut = () => async (dispatch) => {
+  localStorage.removeItem(USER_TOKEN_KEY);
+
+  dispatch(resetStore());
+
+  history.push(ROUTES_URLS.LOGIN);
+};

@@ -3,3 +3,13 @@
   top: 50%;
   left: 50%;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.opacity-70-on-hover {
+  &:hover {
+    opacity: 0.7;
+  }
+}

@@ -1,0 +1,12 @@
+@import "../variables.module";
+
+.layout {
+  .header {
+    flex: 0 0 10%;
+    background-color: $lightBlue;
+  }
+  .main {
+    flex: 1 0;
+    width: 100%;
+  }
+}

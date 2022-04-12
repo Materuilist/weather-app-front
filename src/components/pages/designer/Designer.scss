@@ -1,0 +1,21 @@
+@import "../../../variables.module";
+
+.outfit-constructor {
+  flex: 0 0 80%;
+
+  .garment-slot {
+    width: 5rem;
+    height: 5rem;
+    background-color: #f6f9fa;
+    border: 1px solid $primary;
+
+    > img {
+      width: 80%;
+      height: 80%;
+    }
+  }
+}
+
+.outfit-parameters {
+  flex: 1;
+}
