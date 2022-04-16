@@ -7,8 +7,9 @@ import ScarfImg from "../../../images/scarf.svg";
 import BootImg from "../../../images/boot.svg";
 import GloveImg from "../../../images/glove.svg";
 import { BODY_PARTS } from "../../../constants";
+import classNames from "classnames";
 
-const GarmentSlot = ({ bodyPartId }) => {
+const GarmentSlot = ({ bodyPartId, isSelected, setSelectedBodyPartId }) => {
   const garmentImage = useMemo(() => {
     switch (bodyPartId) {
       case BODY_PARTS.HEAD:
@@ -29,7 +30,13 @@ const GarmentSlot = ({ bodyPartId }) => {
   }, [bodyPartId]);
 
   return (
-    <div className="garment-slot d-flex justify-content-center align-items-center">
+    <div
+      className={classNames(
+        "garment-slot d-flex justify-content-center align-items-center",
+        { selected: isSelected }
+      )}
+      onClick={() => setSelectedBodyPartId(isSelected ? null : bodyPartId)}
+    >
       <img src={garmentImage} />
     </div>
   );

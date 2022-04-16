@@ -12,7 +12,6 @@ const Designer = ({}) => {
       <div className="main d-flex">
         <div className="d-flex col-8 flex-column">
           <OutfitConstructor />
-          <div className="outfit-parameters">params</div>
         </div>
         <div className="col-4">menu</div>
       </div>

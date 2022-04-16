@@ -1,3 +1,5 @@
+@import "../variables.module";
+
 .center-absolute {
   position: absolute;
   top: 50%;
@@ -12,4 +14,12 @@
   &:hover {
     opacity: 0.7;
   }
+}
+
+.opacity-70 {
+  opacity: 0.7;
+}
+
+.border-right-primary {
+  border-right: 1px solid $primary;
 }
