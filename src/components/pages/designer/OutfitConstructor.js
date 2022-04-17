@@ -7,6 +7,9 @@ import GarmentSlot from "./GarmentSlot";
 import TshirtImg from "../../../images/tshirt.svg";
 import scssVariables from "../../../_variables.module.scss";
 import ToolPanel from "./ToolPanel";
+import GarmentService from "../../../services/garment-service";
+
+const garmentService = new GarmentService();
 
 // const BACKGROUND_VERTICAL_PADDING_PERCENTS = 10;
 
@@ -29,12 +32,12 @@ const BODY_PARTS_IDS = Object.values(BODY_PARTS);
 const LEFT_BODY_PARTS = BODY_PARTS_IDS.slice(0, BODY_PARTS_IDS.length / 2);
 const RIGHT_BODY_PARTS = BODY_PARTS_IDS.slice(BODY_PARTS_IDS.length / 2);
 
-const OutfitConstructor = () => {
+const OutfitConstructor = ({ setIsLoading }) => {
   const [selectedBodyPartId, setSelectedBodyPartId] = useState(null);
   const [thickness, setThickness] = useState(1);
   const [color, setColor] = useState("#000");
   const [isErase, setIsErase] = useState(false);
-  const [garmentImage, setGarmentImage] = useState(null);
+  const [backgroundImage, setBackgroundImage] = useState(null);
   const [garmentParameters, setGarmentParameters] = useState({
     clo: 0.18,
     layer: 1,
@@ -54,6 +57,25 @@ const OutfitConstructor = () => {
     !garmentParameters.clo ||
     !garmentParameters.sex;
 
+  const onSubmit = async () => {
+    setIsLoading(true);
+
+    const saveData = drawerRef.current.getSaveData();
+    const imageData = drawerRef.current.getDataURL();
+    const saveDataDeserialized = JSON.parse(saveData);
+    const areLinesDrawn = saveDataDeserialized.lines.length > 0;
+
+    const { id } = await garmentService.addGarment({
+      ...garmentParameters,
+      imageData: areLinesDrawn ? imageData : backgroundImage,
+      saveData: areLinesDrawn ? saveData : null,
+      bodyPartId: selectedBodyPartId,
+    });
+    console.log(id);
+
+    setIsLoading(false);
+  };
+
   return (
     <>
       <div className="outfit-constructor d-flex py-2 pt-4 px-5">
@@ -69,10 +91,15 @@ const OutfitConstructor = () => {
         </div>
         <div className="col">
           <div className="h-100 w-100 position-relative d-flex justify-content-center align-items-center">
+            {backgroundImage && (
+              <img
+                src={backgroundImage}
+                className="w-75 h-100 position-absolute opacity-70"
+              />
+            )}
             <CanvasDraw
-              className="position-absolute border border-dotted h-100 w-75"
+              className="border border-dotted h-100 w-75"
               hideGrid
-              imgSrc={garmentImage}
               brushColor={isErase ? "#fff" : color}
               brushRadius={thickness}
               ref={drawerRef}
@@ -100,8 +127,8 @@ const OutfitConstructor = () => {
           setThickness={setThickness}
           undoHandler={() => drawerRef.current?.undo()}
           clearHandler={() => drawerRef.current?.clear()}
-          garmentImage={garmentImage}
-          setGarmentImage={setGarmentImage}
+          backgroundImage={backgroundImage}
+          setBackgroundImage={setBackgroundImage}
           naming={garmentParameters.naming}
           clo={garmentParameters.clo}
           layer={garmentParameters.layer}
@@ -111,6 +138,7 @@ const OutfitConstructor = () => {
           setLayer={(value) => setGarmentParameter("layer", value)}
           setSex={(value) => setGarmentParameter("sex", value)}
           isSubmitDisabled={isSubmitDisabled}
+          submitHandler={onSubmit}
         />
       </div>
     </>

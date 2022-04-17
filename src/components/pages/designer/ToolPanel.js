@@ -11,8 +11,8 @@ const ToolPanel = ({
   setIsErase,
   undoHandler,
   clearHandler,
-  garmentImage,
-  setGarmentImage,
+  backgroundImage,
+  setBackgroundImage,
   clo,
   layer,
   naming,
@@ -22,17 +22,18 @@ const ToolPanel = ({
   sex,
   setSex,
   isSubmitDisabled,
+  submitHandler,
 }) => {
-  const onGarmentInput = ({
+  const onBackgroundImageInput = ({
     target: {
       files: [file],
     },
   }) => {
     if (!file) {
-      setGarmentImage(null);
+      setBackgroundImage(null);
     } else {
       const fileReader = new FileReader();
-      fileReader.onload = () => setGarmentImage(fileReader.result);
+      fileReader.onload = () => setBackgroundImage(fileReader.result);
       fileReader.readAsDataURL(file);
     }
   };
@@ -46,34 +47,31 @@ const ToolPanel = ({
         <button className="btn btn-primary mb-3" onClick={clearHandler}>
           Clear
         </button>
-        <label
-          htmlFor="garmentInput"
-          className={classNames("btn btn-primary", { disabled: garmentImage })}
-        >
-          Browse Garment
+        <label htmlFor="garmentInput" className="btn btn-primary">
+          Background
         </label>
         <input
           id="garmentInput"
           hidden
           type="file"
           accept="image/*"
-          onChange={onGarmentInput}
-          disabled={garmentImage}
+          onChange={onBackgroundImageInput}
         />
       </div>
       <div className="col-4 border-right-primary h-100 d-flex flex-column justify-content-center align-items-start p-3">
         <div className="form-group d-flex w-100 align-items-center mb-3">
-          <label className="col-4 form-label mb-0">Thickness:</label>
+          <label className="col-4 form-label mb-0 pl-0">Thickness:</label>
           <input
             type="range"
             class="form-control-range col"
             value={thickness}
             onChange={({ target: { value } }) => setThickness(+value)}
             min="1"
+            max="50"
           />
         </div>
         <div className="form-group d-flex w-100 align-items-center mb-3">
-          <label className="col-4 form-label mb-0">Color:</label>
+          <label className="col-4 form-label mb-0 pl-0">Color:</label>
           <input
             className="col form-control"
             type="color"
@@ -81,13 +79,13 @@ const ToolPanel = ({
             onChange={({ target: { value } }) => setColor(value)}
           />
         </div>
-        <div className="form-group d-flex w-100 align-items-center">
-          <label className="col-4 form-label mb-0" htmlFor="isErase">
+        <div className="form-group form-check d-flex w-100 align-items-center">
+          <label className="col-4 form-check-label mb-0 pl-0" htmlFor="isErase">
             Erase:
           </label>
           <input
             type="checkbox"
-            class="custom-control-input"
+            class="form-check-input"
             id="isErase"
             checked={isErase}
             onChange={() => setIsErase(!isErase)}
@@ -96,7 +94,7 @@ const ToolPanel = ({
       </div>
       <div className="col-6 h-100 d-flex flex-column justify-content-center align-items-start p-3">
         <div className="form-group d-flex w-100 align-items-center mb-3">
-          <label className="col-3 form-label mb-0">Naming:</label>
+          <label className="col-3 form-label mb-0 pl-0">Naming:</label>
           <input
             type="text"
             minLength="2"
@@ -106,17 +104,17 @@ const ToolPanel = ({
           />
         </div>
         <div className="form-group d-flex w-100 align-items-center mb-3">
-          <label className="col-3 form-label mb-0">Clo:</label>
+          <label className="col-3 form-label mb-0 pl-0">Clo:</label>
           <input
             type="number"
             step="0.01"
             min="0"
             class="form-control col-3 w-25"
             value={clo}
-            onChange={({ target: { value } }) => setClo(value)}
+            onChange={({ target: { value } }) => setClo(+value)}
           />
           <div className="col-6 d-flex">
-            <div class="form-check col ms-3">
+            <div class="form-check col ml-3">
               <input
                 class="form-check-input"
                 type="radio"
@@ -155,7 +153,7 @@ const ToolPanel = ({
           </div>
         </div>
         <div className="form-group d-flex w-100 align-items-center">
-          <label className="col-3 form-label mb-0">Layer:</label>
+          <label className="col-3 form-label mb-0 pl-0">Layer:</label>
           <input
             type="number"
             step="1"
@@ -163,9 +161,13 @@ const ToolPanel = ({
             max="3"
             class="form-control col"
             value={layer}
-            onChange={({ target: { value } }) => setLayer(value)}
+            onChange={({ target: { value } }) => setLayer(+value)}
           />
-          <button className="btn btn-primary" disabled={isSubmitDisabled}>
+          <button
+            className="btn btn-primary"
+            disabled={isSubmitDisabled}
+            onClick={submitHandler}
+          >
             Submit
           </button>
         </div>

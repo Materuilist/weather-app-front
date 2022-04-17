@@ -27,3 +27,12 @@
 .border-dotted {
   border: 1px dotted $primary;
 }
+
+.overflow-y-auto {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.h-20 {
+  height: 20%;
+}

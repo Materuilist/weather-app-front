@@ -33,6 +33,44 @@
   flex: 1;
 }
 
-.tool-panel {
+.tool-panel,
+.garments-search {
   background-color: $lightBlue;
+
+  .sort-icon {
+    transition: transform 0.3s ease-out;
+    height: 2rem;
+    width: 2rem;
+    cursor: pointer;
+
+    &.reversed {
+      transform: rotate(180deg);
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .garment {
+    position: relative;
+
+    .garment-info {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0.7;
+      background-color: #000;
+      color: #fff;
+    }
+
+    &:hover {
+      .garment-info {
+        display: flex;
+      }
+    }
+  }
 }
