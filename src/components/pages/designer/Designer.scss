@@ -67,7 +67,8 @@
       color: #fff;
     }
 
-    &:hover {
+    &:hover,
+    &.selected {
       .garment-info {
         display: flex;
       }

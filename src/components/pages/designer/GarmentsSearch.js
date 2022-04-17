@@ -1,11 +1,8 @@
 import classNames from "classnames";
 import React, { useEffect, useMemo, useState } from "react";
 import { BODY_PARTS, GARMENT_SEX } from "../../../constants";
-import GarmentService from "../../../services/garment-service";
 
 import ArrowDownImg from "../../../images/arrow-down.svg";
-
-const garmentService = new GarmentService();
 
 const SORT_FIELDS = {
   LAYER: "layer",
@@ -20,16 +17,11 @@ const FILTER_OPTIONS = {
   SEX: GARMENT_SEX,
 };
 
-const GarmentsSearch = ({}) => {
+const GarmentsSearch = ({ garments, garmentDraft, setGarmentDraft }) => {
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState(SORT_DIRECTIONS.ASCENDING);
   const [filterType, setFilterType] = useState(null);
   const [filterSex, setFilterSex] = useState(null);
-  const [garments, setGarments] = useState([]);
-
-  useEffect(() => {
-    garmentService.getAll().then(({ res }) => setGarments(res));
-  }, []);
 
   const processedGarments = useMemo(() => {
     const filteredGarments = garments.filter(
@@ -170,10 +162,10 @@ const GarmentsSearch = ({}) => {
           </div>
         </div>
       </div>
-      <div className="d-flex flex-wrap flex-grow-1 overflow-y-auto">
+      <div className="d-flex flex-wrap flex-grow-1 overflow-y-auto align-content-start">
         {processedGarments.length ? (
-          processedGarments.map(
-            ({
+          processedGarments.map((garment) => {
+            const {
               id,
               naming,
               imageData,
@@ -182,9 +174,26 @@ const GarmentsSearch = ({}) => {
               layer,
               sex,
               bodyPartId,
-            }) => (
-              <div className="garment col-4 h-20 border-right border-bottom border-primary">
-                <div className="garment-info flex-column justify-content-around px-2">
+            } = garment;
+
+            return (
+              <div
+                className={classNames(
+                  "garment col-4 h-20 border-right border-bottom border-primary",
+                  { selected: garmentDraft?.id === id }
+                )}
+              >
+                <div
+                  className="garment-info flex-column justify-content-around px-2"
+                  onClick={
+                    saveData
+                      ? () =>
+                          setGarmentDraft(
+                            garmentDraft?.id === id ? null : garment
+                          )
+                      : null
+                  }
+                >
                   <p className="mb-0">Naming: {naming}</p>
                   <p className="mb-0">Clo: {clo}</p>
                   <p className="mb-0">Layer: {layer}</p>
@@ -199,8 +208,8 @@ const GarmentsSearch = ({}) => {
                 </div>
                 <img src={imageData} className="h-100 w-100" />
               </div>
-            )
-          )
+            );
+          })
         ) : (
           <p className="mx-auto mt-2">No garments found...</p>
         )}

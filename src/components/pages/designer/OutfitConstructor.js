@@ -4,35 +4,16 @@ import CanvasDraw from "react-canvas-draw";
 import { BODY_PARTS } from "../../../constants";
 import GarmentSlot from "./GarmentSlot";
 
-import TshirtImg from "../../../images/tshirt.svg";
-import scssVariables from "../../../_variables.module.scss";
 import ToolPanel from "./ToolPanel";
 import GarmentService from "../../../services/garment-service";
 
 const garmentService = new GarmentService();
 
-// const BACKGROUND_VERTICAL_PADDING_PERCENTS = 10;
-
-// const HEAD_SHARE = 0.25;
-// const BODY_SHARE = 0.4;
-// const NECK_SHARE = 0.05;
-// const LEG_HEIGHT_SHARE = 0.3;
-// const ARM_HEIGHT_SHARE = 0.22;
-
-// const ARM_WIDTH_SHARE = 0.15;
-// const LEG_WIDTH_SHARE = 0.04;
-// const FOOT_WIDTH_SHARE = 0.04;
-
-// const LEG_BOOT_SHARE = 0.15;
-// const ARM_HAND_SHARE = 0.15;
-
-// const PERSON_WIDTH_SHARE = 0.3;
-
 const BODY_PARTS_IDS = Object.values(BODY_PARTS);
 const LEFT_BODY_PARTS = BODY_PARTS_IDS.slice(0, BODY_PARTS_IDS.length / 2);
 const RIGHT_BODY_PARTS = BODY_PARTS_IDS.slice(BODY_PARTS_IDS.length / 2);
 
-const OutfitConstructor = ({ setIsLoading }) => {
+const OutfitConstructor = ({ setIsLoading, garmentDraft, addGarment }) => {
   const [selectedBodyPartId, setSelectedBodyPartId] = useState(null);
   const [thickness, setThickness] = useState(1);
   const [color, setColor] = useState("#000");
@@ -65,7 +46,7 @@ const OutfitConstructor = ({ setIsLoading }) => {
     const saveDataDeserialized = JSON.parse(saveData);
     const areLinesDrawn = saveDataDeserialized.lines.length > 0;
 
-    const { id } = await garmentService.addGarment({
+    const { id } = await addGarment({
       ...garmentParameters,
       imageData: areLinesDrawn ? imageData : backgroundImage,
       saveData: areLinesDrawn ? saveData : null,
@@ -75,6 +56,12 @@ const OutfitConstructor = ({ setIsLoading }) => {
 
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    if (garmentDraft?.saveData) {
+      drawerRef.current.loadSaveData(garmentDraft.saveData);
+    }
+  }, [garmentDraft]);
 
   return (
     <>
@@ -103,6 +90,7 @@ const OutfitConstructor = ({ setIsLoading }) => {
               brushColor={isErase ? "#fff" : color}
               brushRadius={thickness}
               ref={drawerRef}
+              loadTimeOffset={1}
             />
           </div>
         </div>
