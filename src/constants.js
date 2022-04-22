@@ -5,6 +5,23 @@ export const ROUTES_URLS = {
   CLOTHES_CHOICE: "/clothes-choice",
 };
 
+export const CLOTHES_CHOICE_ROUTES = {
+  DRESS: ROUTES_URLS.CLOTHES_CHOICE + "/",
+  STATISTICS: ROUTES_URLS.CLOTHES_CHOICE + "/statistics",
+};
+
+export const STATISTICS_TYPES = {
+  TODAY: 1,
+  USUALLY: 2,
+  FORECAST: 3,
+};
+
+export const STATISTICS_NAMES = {
+  [STATISTICS_TYPES.TODAY]: "В чем ходят сегодня",
+  [STATISTICS_TYPES.USUALLY]: "В чем обычно ходят в такую погоду",
+  [STATISTICS_TYPES.FORECAST]: "Прогноз системы",
+};
+
 export const ROLES = {
   DESIGNER: 1,
   DEFAULT: 2,

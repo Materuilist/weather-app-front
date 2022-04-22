@@ -10,3 +10,13 @@
     width: 100%;
   }
 }
+
+.header {
+  .active-link {
+    &,
+    & .btn.dropdown-toggle {
+      background-color: $primary;
+      color: #fff;
+    }
+  }
+}

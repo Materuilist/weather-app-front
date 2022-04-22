@@ -6,7 +6,7 @@ import {
 import AuthService from "../../services/auth-service";
 import { USER_ACTION_TYPES } from "../action-types";
 import { history } from "../index";
-import { resetStore } from "./shared-actions";
+import { resetStore } from "./shared.actions";
 
 const authService = new AuthService();
 

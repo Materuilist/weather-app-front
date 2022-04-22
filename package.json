@@ -11,6 +11,7 @@
     "classnames": "^2.3.1",
     "connected-react-router": "^6.9.2",
     "jquery": "^3.6.0",
+    "moment": "^2.29.3",
     "popper.js": "^1.16.1",
     "react": "^17.0.0",
     "react-canvas-draw": "^1.2.1",

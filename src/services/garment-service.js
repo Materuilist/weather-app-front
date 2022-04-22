@@ -26,6 +26,26 @@ class GarmentService extends BaseService {
       headers: { "Content-Type": "application/json" },
     });
   }
+
+  addToWardrobe(garmentId) {
+    return this.request("add-to-wardrobe", {
+      method: "POST",
+      body: JSON.stringify({
+        garmentId,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  removeFromWardrobe(garmentId) {
+    return this.request("remove-from-wardrobe", {
+      method: "POST",
+      body: JSON.stringify({
+        garmentId,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 }
 
 export default GarmentService;

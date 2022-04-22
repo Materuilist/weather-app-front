@@ -5,7 +5,7 @@ import {
   USER_TOKEN_KEY,
 } from "../constants";
 import { store } from "../store";
-import * as alertsActions from "../store/actions/alerts-actions";
+import * as alertsActions from "../store/actions/alerts.actions";
 
 class BaseService {
   baseUrl = "http://localhost:8000/api/";

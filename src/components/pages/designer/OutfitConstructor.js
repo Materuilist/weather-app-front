@@ -2,12 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import CanvasDraw from "react-canvas-draw";
 
 import { BODY_PARTS } from "../../../constants";
-import GarmentSlot from "./GarmentSlot";
+import GarmentSlot from "../../shared/GarmentSlot/GarmentSlot.js";
 
 import ToolPanel from "./ToolPanel";
-import GarmentService from "../../../services/garment-service";
-
-const garmentService = new GarmentService();
 
 const BODY_PARTS_IDS = Object.values(BODY_PARTS);
 const LEFT_BODY_PARTS = BODY_PARTS_IDS.slice(0, BODY_PARTS_IDS.length / 2);
@@ -71,7 +68,11 @@ const OutfitConstructor = ({ setIsLoading, garmentDraft, addGarment }) => {
             <GarmentSlot
               key={bodyPartId}
               bodyPartId={bodyPartId}
-              setSelectedBodyPartId={setSelectedBodyPartId}
+              onClick={() =>
+                setSelectedBodyPartId(
+                  bodyPartId === selectedBodyPartId ? null : bodyPartId
+                )
+              }
               isSelected={selectedBodyPartId === bodyPartId}
             />
           ))}
@@ -99,7 +100,11 @@ const OutfitConstructor = ({ setIsLoading, garmentDraft, addGarment }) => {
             <GarmentSlot
               key={bodyPartId}
               bodyPartId={bodyPartId}
-              setSelectedBodyPartId={setSelectedBodyPartId}
+              onClick={() =>
+                setSelectedBodyPartId(
+                  bodyPartId === selectedBodyPartId ? null : bodyPartId
+                )
+              }
               isSelected={selectedBodyPartId === bodyPartId}
             />
           ))}
