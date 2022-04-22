@@ -43,3 +43,16 @@ export const removeFromWardrobe = (garmentId, cb) => async (dispatch) => {
 
   dispatch(getGarments(cb));
 };
+
+export const toggleGarmentSelection = (garment) => (dispatch, getState) => {
+  const {
+    dressChoice: { selectedGarments },
+  } = getState();
+
+  const isSelected = selectedGarments.some(({ id }) => id === garment.id);
+  const newSelectedGarments = isSelected
+    ? selectedGarments.filter(({ id }) => id !== garment.id)
+    : [...selectedGarments, garment];
+
+  dispatch(setSelectedGarments(newSelectedGarments));
+};

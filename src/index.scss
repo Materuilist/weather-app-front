@@ -13,3 +13,14 @@ body {
   width: 100%;
   height: 100%;
 }
+
+.triangle {
+  width: 2rem;
+  height: 1.5rem;
+  background-color: $primary;
+  clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+
+  &-reversed {
+    transform: rotate(180deg);
+  }
+}

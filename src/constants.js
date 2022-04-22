@@ -55,6 +55,10 @@ export const BODY_PARTS = {
   HAND: 6,
 };
 
+export const BODY_PARTS_IDS = Object.values(BODY_PARTS);
+export const LEFT_BODY_PARTS = BODY_PARTS_IDS.slice(0, BODY_PARTS_IDS.length / 2);
+export const RIGHT_BODY_PARTS = BODY_PARTS_IDS.slice(BODY_PARTS_IDS.length / 2);
+
 export const GARMENT_SEX = {
   MALE: 1,
   FEMALE: 2,

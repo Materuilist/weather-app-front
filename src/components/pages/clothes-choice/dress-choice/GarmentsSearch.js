@@ -1,8 +1,10 @@
 import classNames from "classnames";
 import React, { useEffect, useMemo, useState } from "react";
+import { connect } from "react-redux";
 import { BODY_PARTS, GARMENT_SEX } from "../../../../constants";
 
 import ArrowDownImg from "../../../../images/arrow-down.svg";
+import mapDispatchToProps from "../../../../store/actions";
 
 const SORT_FIELDS = {
   LAYER: "layer",
@@ -16,17 +18,35 @@ const FILTER_OPTIONS = {
   TYPE: BODY_PARTS,
 };
 
-const GarmentsSearch = ({ garments, toggleWardrobe }) => {
+const GarmentsSearch = ({
+  garments,
+  selectedGarments,
+  toggleWardrobe,
+  dressChoiceActions,
+}) => {
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState(SORT_DIRECTIONS.ASCENDING);
   const [filterType, setFilterType] = useState(null);
   const [isWardrobe, setIsWardrobe] = useState(false);
 
+  // object, where key - layer and value - array of body part ids that are already selected for that layer
+  const selectedLayersBodyParts = useMemo(
+    () =>
+      selectedGarments.reduce(
+        (res, garment) => ({
+          ...res,
+          [garment.layer]: [...(res[garment.layer] || []), garment.bodyPartId],
+        }),
+        {}
+      ),
+    [selectedGarments]
+  );
+
   const processedGarments = useMemo(() => {
-    const filteredGarments = garments.filter(
-      ({ bodyPartId, isOwned }) =>
-        (filterType ? bodyPartId === filterType : true) &&
-        isOwned === isWardrobe
+    const filteredGarments = garments.filter(({ bodyPartId, isOwned }) =>
+      (filterType ? bodyPartId === filterType : true) && isWardrobe
+        ? isOwned
+        : true
     );
 
     if (sortField) {
@@ -159,6 +179,9 @@ const GarmentsSearch = ({ garments, toggleWardrobe }) => {
               isOwned,
             } = garment;
 
+            const isDisabled =
+              selectedLayersBodyParts[layer]?.includes(bodyPartId);
+
             return (
               <div
                 className={classNames(
@@ -168,7 +191,18 @@ const GarmentsSearch = ({ garments, toggleWardrobe }) => {
                   }
                 )}
               >
-                <img src={imageData} className="h-75 w-75" />
+                <img
+                  src={imageData}
+                  className={classNames("h-75 w-75", {
+                    "opacity-30": isDisabled,
+                  })}
+                  style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
+                  onClick={
+                    isDisabled
+                      ? null
+                      : () => dressChoiceActions.toggleGarmentSelection(garment)
+                  }
+                />
                 <button
                   className="btn btn-primary rounded position-absolute"
                   style={{ right: "5%", top: "5%" }}
@@ -187,4 +221,4 @@ const GarmentsSearch = ({ garments, toggleWardrobe }) => {
   );
 };
 
-export default GarmentsSearch;
+export default connect(null, mapDispatchToProps)(GarmentsSearch);

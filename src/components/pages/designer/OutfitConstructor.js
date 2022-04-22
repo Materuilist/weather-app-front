@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import CanvasDraw from "react-canvas-draw";
 
-import { BODY_PARTS } from "../../../constants";
+import { LEFT_BODY_PARTS, RIGHT_BODY_PARTS } from "../../../constants";
 import GarmentSlot from "../../shared/GarmentSlot/GarmentSlot.js";
 
 import ToolPanel from "./ToolPanel";
-
-const BODY_PARTS_IDS = Object.values(BODY_PARTS);
-const LEFT_BODY_PARTS = BODY_PARTS_IDS.slice(0, BODY_PARTS_IDS.length / 2);
-const RIGHT_BODY_PARTS = BODY_PARTS_IDS.slice(BODY_PARTS_IDS.length / 2);
 
 const OutfitConstructor = ({ setIsLoading, garmentDraft, addGarment }) => {
   const [selectedBodyPartId, setSelectedBodyPartId] = useState(null);
