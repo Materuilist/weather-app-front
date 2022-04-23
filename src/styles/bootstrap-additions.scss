@@ -37,6 +37,10 @@
   overflow-x: hidden;
 }
 
+.h-10 {
+  height: 10%;
+}
+
 .h-20 {
   height: 20%;
 }
@@ -47,4 +51,8 @@
 
 .max-width-100 {
   max-width: 100%;
+}
+
+.bg-light-blue{
+  background-color: $lightBlue;
 }

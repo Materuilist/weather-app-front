@@ -1,6 +1,7 @@
 import { DRESS_CHOICE_ACTIONS } from "../action-types";
 import GarmentService from "../../services/garment-service";
 import { GARMENT_SEX } from "../../constants";
+import { compareLocations } from "../../utils";
 
 const garmentService = new GarmentService();
 
@@ -56,3 +57,39 @@ export const toggleGarmentSelection = (garment) => (dispatch, getState) => {
 
   dispatch(setSelectedGarments(newSelectedGarments));
 };
+
+const setWaypoints = (waypoints) => ({
+  type: DRESS_CHOICE_ACTIONS.SET_WAYPOINTS,
+  waypoints,
+});
+
+export const changeWaypoints = (waypoints) => (dispatch, getState) => {
+  const {
+    dressChoice: { waypointsData },
+  } = getState();
+
+  const newWaypointsData = waypoints.map(
+    (waypoint) =>
+      waypointsData.find(({ coordinates }) =>
+        compareLocations(coordinates, waypoint.coordinates)
+      ) || {
+        ...waypoint,
+        activity: 0,
+        addToFavorites: false,
+        naming: "",
+      }
+  );
+
+  dispatch(setWaypointsData(newWaypointsData));
+  dispatch(setWaypoints(waypoints));
+};
+
+export const setWaypointsData = (waypointsData) => ({
+  type: DRESS_CHOICE_ACTIONS.SET_WAYPOINTS_DATA,
+  waypointsData,
+});
+
+export const setLocationDataPanelVisibility = (isVisible) => ({
+  type: DRESS_CHOICE_ACTIONS.SET_LOCATION_DATA_PANEL_VISIBILITY,
+  isLocationDataPanelVisible: isVisible,
+});
