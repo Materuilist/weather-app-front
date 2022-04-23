@@ -109,6 +109,7 @@ export const getWeather = (date, hour, cb) => async (dispatch, getState) => {
   const forecasts = await Promise.all(
     waypointsData.map(async (waypointData) => ({
       ...waypointData,
+      activity: 105 + (waypointData.activity / 100) * 105 * 6,
       forecast: await weatherService
         .getWeather(waypointData.coordinates[0], waypointData.coordinates[1])
         .then((forecast) => {

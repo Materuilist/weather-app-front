@@ -28,8 +28,7 @@ const ParametersForm = ({
   const isSubmitDisaabled =
     !selectedGarments.length ||
     waypointsData.some(
-      ({ activity, addToFavorites, naming }) =>
-        !activity || (addToFavorites && !naming)
+      ({ addToFavorites, naming }) => addToFavorites && !naming
     );
 
   return (
