@@ -1,11 +1,14 @@
+import moment from "moment";
 import { DRESS_CHOICE_ACTIONS } from "../action-types";
 import GarmentService from "../../services/garment-service";
 import WeatherService from "../../services/weather-service";
+import ForecastService from "../../services/forecast-service";
 import { GARMENT_SEX } from "../../constants";
 import { compareLocations } from "../../utils";
 
 const garmentService = new GarmentService();
 const weatherService = new WeatherService();
+const forecastService = new ForecastService();
 
 const setAllGraments = (garments) => ({
   type: DRESS_CHOICE_ACTIONS.SET_ALL_GARMENTS,
@@ -96,12 +99,12 @@ export const setLocationDataPanelVisibility = (isVisible) => ({
   isLocationDataPanelVisible: isVisible,
 });
 
-export const getWeather = (date, hour) => async (dispatch, getState) => {
+export const getWeather = (date, hour, cb) => async (dispatch, getState) => {
   const {
-    dressChoice: { waypointsData },
+    dressChoice: { waypointsData, selectedGarments },
   } = getState();
 
-  console.log(date, hour);
+  const timestamp = moment(date).add(hour, "hours").toDate();
 
   const forecasts = await Promise.all(
     waypointsData.map(async (waypointData) => ({
@@ -119,12 +122,24 @@ export const getWeather = (date, hour) => async (dispatch, getState) => {
           });
 
           return {
-            temp: neededForecast.temp,
+            temp: neededForecast.feels_like,
             windSpeed: neededForecast.wind_speed,
           };
         }),
     }))
   );
 
-  console.log(forecasts);
+  const res = await forecastService.assessOutfit({
+    waypointsData: forecasts,
+    timestamp,
+    outfit: selectedGarments.map(({ id, clo, layer, bodyPartId }) => ({
+      id,
+      clo,
+      layer,
+      bodyPartId,
+    })),
+  });
+
+  console.log(res);
+  cb?.();
 };

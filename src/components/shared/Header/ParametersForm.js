@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import moment from "moment";
 import { connect } from "react-redux";
 import mapDispatchToProps from "../../../store/actions";
+import Loader from "../Loader/Loader";
 
 const getHoursMinutesString = (hours) => {
   return `${hours < 10 ? "0" + hours : hours}:00`;
@@ -12,11 +13,16 @@ const ParametersForm = ({
   waypointsData,
   dressChoiceActions,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [time, setTime] = useState(new Date().getHours() + 1);
 
   const onSubmit = () => {
-    dressChoiceActions.getWeather(moment(date).toDate(), time);
+    setIsLoading(true);
+
+    dressChoiceActions.getWeather(moment(date).toDate(), time, () =>
+      setIsLoading(false)
+    );
   };
 
   const isSubmitDisaabled =
@@ -28,6 +34,7 @@ const ParametersForm = ({
 
   return (
     <div className="d-flex h-100 align-items-center">
+      <Loader isLoading={isLoading} />
       <input
         className="form-control col-2"
         type="date"
