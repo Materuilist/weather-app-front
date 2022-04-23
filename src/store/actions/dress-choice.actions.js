@@ -1,9 +1,11 @@
 import { DRESS_CHOICE_ACTIONS } from "../action-types";
 import GarmentService from "../../services/garment-service";
+import WeatherService from "../../services/weather-service";
 import { GARMENT_SEX } from "../../constants";
 import { compareLocations } from "../../utils";
 
 const garmentService = new GarmentService();
+const weatherService = new WeatherService();
 
 const setAllGraments = (garments) => ({
   type: DRESS_CHOICE_ACTIONS.SET_ALL_GARMENTS,
@@ -74,7 +76,7 @@ export const changeWaypoints = (waypoints) => (dispatch, getState) => {
         compareLocations(coordinates, waypoint.coordinates)
       ) || {
         ...waypoint,
-        activity: 0,
+        activity: 10,
         addToFavorites: false,
         naming: "",
       }
@@ -93,3 +95,36 @@ export const setLocationDataPanelVisibility = (isVisible) => ({
   type: DRESS_CHOICE_ACTIONS.SET_LOCATION_DATA_PANEL_VISIBILITY,
   isLocationDataPanelVisible: isVisible,
 });
+
+export const getWeather = (date, hour) => async (dispatch, getState) => {
+  const {
+    dressChoice: { waypointsData },
+  } = getState();
+
+  console.log(date, hour);
+
+  const forecasts = await Promise.all(
+    waypointsData.map(async (waypointData) => ({
+      ...waypointData,
+      forecast: await weatherService
+        .getWeather(waypointData.coordinates[0], waypointData.coordinates[1])
+        .then((forecast) => {
+          const neededForecast = forecast.hourly.find(({ dt }) => {
+            const forecastDate = new Date(dt * 1000);
+
+            return (
+              forecastDate.getDate() === date.getDate() &&
+              forecastDate.getHours() === hour
+            );
+          });
+
+          return {
+            temp: neededForecast.temp,
+            windSpeed: neededForecast.wind_speed,
+          };
+        }),
+    }))
+  );
+
+  console.log(forecasts);
+};
