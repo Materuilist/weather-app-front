@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import mapDispatchToProps from "../../../../../store/actions";
 
-const WaypointsMap = ({ waypoints, dressChoiceActions }) => {
+const WaypointMap = ({ waypoint, statisticsActions }) => {
   const mapRef = useRef(null);
   const multiRouteRef = useRef(null);
 
@@ -14,14 +14,16 @@ const WaypointsMap = ({ waypoints, dressChoiceActions }) => {
             coords: { latitude, longitude },
           } = position;
 
-          mapRef.current = new window.ymaps.Map("waypointsMap", {
+          mapRef.current = new window.ymaps.Map("waypointMap", {
             center: [latitude, longitude],
             zoom: 9,
             controls: [],
           });
 
           var multiRoute = new window.ymaps.multiRouter.MultiRoute(
-            { referencePoints: [[latitude, longitude]] },
+            {
+              referencePoints: [waypoint?.coordinates || [latitude, longitude]],
+            },
             {
               editorDrawOver: false,
               editorMidPointsType: "way",
@@ -33,9 +35,9 @@ const WaypointsMap = ({ waypoints, dressChoiceActions }) => {
           multiRoute.model.events.add("requestsuccess", onWayPointsChange);
 
           multiRoute.editor.start({
-            addWayPoints: true,
-            removeWayPoints: true,
-            addMidPoints: true,
+            addWayPoints: false,
+            removeWayPoints: false,
+            addMidPoints: false,
           });
 
           mapRef.current.geoObjects.add(multiRoute);
@@ -58,15 +60,14 @@ const WaypointsMap = ({ waypoints, dressChoiceActions }) => {
       });
     });
 
-    console.log(newWaypointsMapped);
-    dressChoiceActions.changeWaypoints(newWaypointsMapped);
+    statisticsActions.setWaypoint(newWaypointsMapped[0]);
   };
 
-  return <div id="waypointsMap" className="w-100 h-100"></div>;
+  return <div id="waypointMap" className="w-100 h-100"></div>;
 };
 
-const mapStateToProps = ({ dressChoice: { waypoints } }) => ({
-  waypoints,
+const mapStateToProps = ({ statistics: { waypoint } }) => ({
+  waypoint,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(WaypointsMap);
+export default connect(mapStateToProps, mapDispatchToProps)(WaypointMap);

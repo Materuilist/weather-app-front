@@ -3,10 +3,12 @@ import { connectRouter } from "connected-react-router";
 import userReducer from "./user-reducer";
 import alertsReducer from "./alerts-reducer";
 import dressChoiceReducer from "./dress-choice.reducer";
+import statisticsReducer from "./statistics.reducer";
 
 const reducers = {
   user: userReducer,
   dressChoice: dressChoiceReducer,
+  statistics: statisticsReducer,
 
   alerts: alertsReducer,
 };

@@ -3,45 +3,74 @@ import moment from "moment";
 import { connect } from "react-redux";
 import mapDispatchToProps from "../../../store/actions";
 import Loader from "../Loader/Loader";
+import { Route } from "react-router-dom";
+import { CLOTHES_CHOICE_ROUTES, STATISTICS_TYPES } from "../../../constants";
 
 const getHoursMinutesString = (hours) => {
   return `${hours < 10 ? "0" + hours : hours}:00`;
 };
 
+const getStatisticsType = (pathname) => {
+  return +pathname.match(/\/clothes-choice\/statistics\/(?<type>\d>*)/)?.groups
+    ?.type;
+};
+
 const ParametersForm = ({
   selectedGarments,
   waypointsData,
+  statisticsWaypoint,
   dressChoiceActions,
+  statisticsActions,
+  location: { pathname },
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [time, setTime] = useState(new Date().getHours() + 1);
 
+  const statisticsType = getStatisticsType(pathname);
+
   const onSubmit = () => {
     setIsLoading(true);
 
-    dressChoiceActions.getWeather(moment(date).toDate(), time, () =>
-      setIsLoading(false)
-    );
+    if (statisticsType) {
+      switch (statisticsType) {
+        case STATISTICS_TYPES.TODAY:
+          return statisticsActions.getTodayStatistics(time, () =>
+            setIsLoading(false)
+          );
+        default:
+          return;
+      }
+    } else {
+      dressChoiceActions.getWeather(moment(date).toDate(), time, () =>
+        setIsLoading(false)
+      );
+    }
   };
 
-  const isSubmitDisaabled =
-    !selectedGarments.length ||
-    waypointsData.some(
-      ({ addToFavorites, naming }) => addToFavorites && !naming
-    );
+  const isSubmitDisabled =
+    statisticsType === STATISTICS_TYPES.TODAY
+      ? !statisticsWaypoint
+      : !selectedGarments.length ||
+        waypointsData.some(
+          ({ addToFavorites, naming }) => addToFavorites && !naming
+        );
 
   return (
     <div className="d-flex h-100 align-items-center">
       <Loader isLoading={isLoading} />
-      <input
-        className="form-control col-2"
-        type="date"
-        value={date}
-        onChange={({ target: { value } }) => setDate(value)}
-        min={moment().format("YYYY-MM-DD")}
-        max={moment().add(1, "days").format("YYYY-MM-DD")}
-      />
+      <Route
+        path={`${CLOTHES_CHOICE_ROUTES.STATISTICS}/${STATISTICS_TYPES.USUALLY}`}
+      >
+        <input
+          className="form-control col-2"
+          type="date"
+          value={date}
+          onChange={({ target: { value } }) => setDate(value)}
+          min={moment().format("YYYY-MM-DD")}
+          max={moment().add(1, "days").format("YYYY-MM-DD")}
+        />
+      </Route>
       <div className="col-3 d-flex align-items-center">
         <span className="mr-3">{getHoursMinutesString(time)}</span>
         <input
@@ -74,7 +103,7 @@ const ParametersForm = ({
       </div> */}
       <button
         className="btn btn-primary rounded text-uppercase ml-auto"
-        disabled={isSubmitDisaabled}
+        disabled={isSubmitDisabled}
         onClick={onSubmit}
       >
         Go
@@ -85,9 +114,13 @@ const ParametersForm = ({
 
 const mapStateToProps = ({
   dressChoice: { selectedGarments, waypointsData },
+  statistics: { waypoint: statisticsWaypoint },
+  router: { location },
 }) => ({
   selectedGarments,
   waypointsData,
+  location,
+  statisticsWaypoint,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParametersForm);
