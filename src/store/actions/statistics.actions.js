@@ -1,4 +1,5 @@
 import moment from "moment";
+import { STATISTICS_RADIUS_KM } from "../../constants";
 import StatisticsService from "../../services/statistics-service";
 import { STATISTICS_ACTIONS } from "../action-types";
 
@@ -9,7 +10,7 @@ export const setWaypoint = (waypoint) => ({
   waypoint,
 });
 
-const setData = (data) => ({
+export const setData = (data) => ({
   type: STATISTICS_ACTIONS.SET_DATA,
   data,
 });
@@ -25,6 +26,7 @@ export const getTodayStatistics = (hour, cb) => async (dispatch, getState) => {
   const { res: statistics } = await statisticsService.getToday({
     timestamp,
     coordinates,
+    radius: STATISTICS_RADIUS_KM,
   });
 
   dispatch(setData(statistics?.mostPopularOutfit ? statistics : null));

@@ -1,5 +1,5 @@
 import React from "react";
-import { BODY_PARTS } from "../../../../constants";
+import { BODY_PARTS } from "../../../constants";
 
 const OutfitRepresentation = ({ layerGarments }) => {
   const getPositionStyle = (bodyPartId, isDualPartLeft = true) => {

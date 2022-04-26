@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { LEFT_BODY_PARTS, RIGHT_BODY_PARTS } from "../../../../constants";
 import mapDispatchToProps from "../../../../store/actions";
 import GarmentSlot from "../../../shared/GarmentSlot/GarmentSlot";
-import OutfitRepresentation from "./OutfitRepresentation";
+import OutfitRepresentation from "../../../shared/OutfitRepresentation/OutfitRepresentation";
 
 const OutfitView = ({
   selectedGarments,

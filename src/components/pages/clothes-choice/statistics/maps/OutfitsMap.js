@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
+import { STATISTICS_RADIUS_KM } from "../../../../../constants";
 import mapDispatchToProps from "../../../../../store/actions";
 import { getOutfitDataUrl } from "../../../../../utils";
 
@@ -14,11 +15,20 @@ const OutfitsMap = ({ waypoint, data, statisticsActions }) => {
             coords: { latitude, longitude },
           } = position;
 
-          mapRef.current = new window.ymaps.Map("outfitsMap", {
-            center: waypoint?.coordinates || [latitude, longitude],
-            zoom: 9,
-            controls: [],
-          });
+          const coordinates = waypoint?.coordinates || [latitude, longitude];
+
+          mapRef.current = new window.ymaps.Map(
+            "outfitsMap",
+            {
+              center: coordinates,
+              zoom: 9,
+              controls: [],
+            },
+            {
+              maxZoom: 9,
+              minZoom: 9,
+            }
+          );
 
           const garmentsToDisplay = Object.values(
             data.mostPopularOutfit.reduce(
@@ -33,10 +43,8 @@ const OutfitsMap = ({ waypoint, data, statisticsActions }) => {
             )
           );
 
-          console.log(data.mostPopularOutfit, garmentsToDisplay);
-
           var outfitPlacemark = new window.ymaps.Placemark(
-            waypoint?.coordinates || [latitude, longitude],
+            coordinates,
             {},
             {
               iconLayout: "default#image",
@@ -46,12 +54,34 @@ const OutfitsMap = ({ waypoint, data, statisticsActions }) => {
             }
           );
 
+          var statisticsAreaCircle = new window.ymaps.GeoObject({
+            geometry: {
+              type: "Circle",
+              coordinates: coordinates,
+              radius: STATISTICS_RADIUS_KM * 1000,
+            },
+          });
+
+          mapRef.current.geoObjects.add(statisticsAreaCircle);
           mapRef.current.geoObjects.add(outfitPlacemark);
+
+          // mapRef.current.events.add("boundschange", onBoundsChange);
         },
         () => alert("You need to enable geolocation")
       );
     });
   }, []);
+
+  // const onBoundsChange = (event) => {
+  //   const oldZoom = event.get("oldZoom");
+  //   const newZoom = event.get("newZoom");
+
+  //   console.log(oldZoom, newZoom);
+
+  //   if(newZoom > oldZoom){
+  //     statisticsActions.getTodayStatistics(11, )
+  //   }
+  // };
 
   return <div id="outfitsMap" className="w-100 h-100"></div>;
 };

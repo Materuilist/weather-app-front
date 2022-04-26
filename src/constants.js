@@ -55,8 +55,20 @@ export const BODY_PARTS = {
   HAND: 6,
 };
 
+export const BODY_PARTS_NAMES = {
+  1: "Head",
+  2: "Body",
+  3: "Leg",
+  4: "Neck",
+  5: "Foot",
+  6: "Hand",
+};
+
 export const BODY_PARTS_IDS = Object.values(BODY_PARTS);
-export const LEFT_BODY_PARTS = BODY_PARTS_IDS.slice(0, BODY_PARTS_IDS.length / 2);
+export const LEFT_BODY_PARTS = BODY_PARTS_IDS.slice(
+  0,
+  BODY_PARTS_IDS.length / 2
+);
 export const RIGHT_BODY_PARTS = BODY_PARTS_IDS.slice(BODY_PARTS_IDS.length / 2);
 
 export const GARMENT_SEX = {
@@ -64,3 +76,5 @@ export const GARMENT_SEX = {
   FEMALE: 2,
   UNISEX: 3,
 };
+
+export const STATISTICS_RADIUS_KM = 25;
