@@ -38,6 +38,12 @@ const ParametersForm = ({
           return statisticsActions.getTodayStatistics(time, () =>
             setIsLoading(false)
           );
+        case STATISTICS_TYPES.USUALLY:
+          return statisticsActions.getAllTimeStatistics(
+            moment(date).toDate(),
+            time,
+            () => setIsLoading(false)
+          );
         default:
           return;
       }
@@ -49,7 +55,8 @@ const ParametersForm = ({
   };
 
   const isSubmitDisabled =
-    statisticsType === STATISTICS_TYPES.TODAY
+    statisticsType === STATISTICS_TYPES.TODAY ||
+    statisticsType === STATISTICS_TYPES.USUALLY
       ? !statisticsWaypoint
       : !selectedGarments.length ||
         waypointsData.some(

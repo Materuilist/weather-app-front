@@ -8,6 +8,7 @@ export const ALERTS_ACTION_TYPES = {
 
 export const SHARED_ACTION_TYPES = {
   RESET_STORE: "RESET_STORE",
+  LOCATION_CHANGE: "@@router/LOCATION_CHANGE",
 };
 
 export const DRESS_CHOICE_ACTIONS = {

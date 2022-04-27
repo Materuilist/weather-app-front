@@ -14,6 +14,14 @@ class StatisticsService extends BaseService {
       body: JSON.stringify(body),
     });
   }
+  
+  getAllTime(body) {
+    return this.request("get-all-time", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  }
 }
 
 export default StatisticsService;

@@ -12,6 +12,7 @@ const statisticsReducer = (state = initialState, action) => {
     case STATISTICS_ACTIONS.SET_DATA:
       return { ...state, data: action.data };
     case SHARED_ACTION_TYPES.RESET_STORE:
+    case SHARED_ACTION_TYPES.LOCATION_CHANGE:
       return initialState;
     default:
       return state;
