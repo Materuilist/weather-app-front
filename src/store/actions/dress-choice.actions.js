@@ -15,9 +15,14 @@ const setAllGraments = (garments) => ({
   allGarments: garments,
 });
 
-const setSelectedGarments = (selectedGarments) => ({
+export const setSelectedGarments = (selectedGarments) => ({
   type: DRESS_CHOICE_ACTIONS.SET_GARMENT_SELECTION,
   selectedGarments,
+});
+
+const setAssessment = (assessment) => ({
+  type: DRESS_CHOICE_ACTIONS.SET_ASSESSMENT,
+  assessment,
 });
 
 export const getGarments = (cb) => async (dispatch, getState) => {
@@ -130,7 +135,9 @@ export const getWeather = (date, hour, cb) => async (dispatch, getState) => {
     }))
   );
 
-  const res = await forecastService.assessOutfit({
+  const {
+    res: { meanEstimation, recomendations },
+  } = await forecastService.assessOutfit({
     waypointsData: forecasts,
     timestamp,
     outfit: selectedGarments.map(({ id, clo, layer, bodyPartId }) => ({
@@ -141,6 +148,7 @@ export const getWeather = (date, hour, cb) => async (dispatch, getState) => {
     })),
   });
 
-  console.log(res);
+  dispatch(setAssessment({ meanEstimation, recomendations }));
+
   cb?.();
 };

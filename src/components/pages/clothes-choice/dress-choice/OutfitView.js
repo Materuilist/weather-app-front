@@ -10,6 +10,7 @@ const OutfitView = ({
   dressChoiceActions,
   displayLayer,
   setDisplayLayer,
+  modifyOutfit = true,
 }) => {
   const layerGarments = useMemo(
     () =>
@@ -27,7 +28,7 @@ const OutfitView = ({
     );
 
   return (
-    <div className="outfit-view h-100 d-flex py-2 pt-4 px-3">
+    <div className="outfit-view h-100 w-100 d-flex py-2 pt-4 px-3">
       <div className="d-flex flex-column justify-content-between">
         {LEFT_BODY_PARTS.map((bodyPartId) => {
           const garment = getGarmentByBodyPart(bodyPartId);
@@ -37,7 +38,7 @@ const OutfitView = ({
               key={bodyPartId}
               bodyPartId={bodyPartId}
               onClick={
-                garment
+                modifyOutfit && garment
                   ? () => dressChoiceActions.toggleGarmentSelection(garment)
                   : null
               }

@@ -75,7 +75,7 @@ export const getAllTimeStatistics =
   };
 
 export const getRecomendation =
-  (date, hour, cb) => async (dispatch, getState) => {
+  (date, hour, activity, cb) => async (dispatch, getState) => {
     const {
       statistics: {
         waypoint: { coordinates },
@@ -104,6 +104,7 @@ export const getRecomendation =
       coordinates,
       temp,
       windSpeed,
+      activity: 105 + (activity / 100) * 105 * 6,
     });
 
     dispatch(

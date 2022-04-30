@@ -26,6 +26,7 @@ const ParametersForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [time, setTime] = useState(new Date().getHours() + 1);
+  const [activity, setActivity] = useState(10);
 
   const statisticsType = getStatisticsType(pathname);
 
@@ -48,6 +49,7 @@ const ParametersForm = ({
           return statisticsActions.getRecomendation(
             moment(date).toDate(),
             time,
+            activity,
             () => setIsLoading(false)
           );
         default:
@@ -97,6 +99,21 @@ const ParametersForm = ({
           onChange={({ target: { value } }) => setTime(+value)}
         />
       </div>
+      {statisticsType === STATISTICS_TYPES.FORECAST && (
+        <div className="col-3 d-flex align-items-center">
+          <span className="ml-3">Activity:</span>
+          <span className="ml-1 mr-3">{activity}%</span>
+          <input
+            className=""
+            type="range"
+            value={time}
+            min={0}
+            max={100}
+            step={1}
+            onChange={({ target: { value } }) => setActivity(+value)}
+          />
+        </div>
+      )}
       {/* <div className="col-6 d-flex">
         <div
           className={classNames("btn rounded mr-2 border border-primary col", {
