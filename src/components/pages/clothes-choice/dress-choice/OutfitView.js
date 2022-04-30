@@ -64,7 +64,7 @@ const OutfitView = ({
             <div
               className="triangle triangle-reversed opacity-70-on-hover cursor-pointer"
               onClick={
-                displayLayer > 1
+                displayLayer > 0
                   ? () => setDisplayLayer(displayLayer - 1)
                   : null
               }

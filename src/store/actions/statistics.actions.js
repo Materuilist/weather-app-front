@@ -73,3 +73,49 @@ export const getAllTimeStatistics =
 
     cb?.();
   };
+
+export const getRecomendation =
+  (date, hour, cb) => async (dispatch, getState) => {
+    const {
+      statistics: {
+        waypoint: { coordinates },
+      },
+    } = getState();
+
+    const { temp, windSpeed } = await weatherService
+      .getWeather(coordinates[0], coordinates[1])
+      .then((forecast) => {
+        const neededForecast = forecast.hourly.find(({ dt }) => {
+          const forecastDate = new Date(dt * 1000);
+
+          return (
+            forecastDate.getDate() === date.getDate() &&
+            forecastDate.getHours() === hour
+          );
+        });
+
+        return {
+          temp: neededForecast.feels_like,
+          windSpeed: neededForecast.wind_speed,
+        };
+      });
+
+    const { res: statistics } = await statisticsService.getRecomendation({
+      coordinates,
+      temp,
+      windSpeed,
+    });
+
+    dispatch(
+      setData(
+        statistics?.fittingOutfits
+          ? {
+              outfits: statistics.fittingOutfits,
+              recommendedOutfit: statistics.recommendedOutfit,
+            }
+          : null
+      )
+    );
+
+    cb?.();
+  };

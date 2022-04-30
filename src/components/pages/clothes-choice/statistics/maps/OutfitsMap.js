@@ -31,7 +31,7 @@ const OutfitsMap = ({ waypoint, data, statisticsActions }) => {
           );
 
           const garmentsToDisplay = Object.values(
-            data.mostPopularOutfit.reduce(
+            data.recommendedOutfit.reduce(
               (res, garment) => ({
                 ...res,
                 [garment.bodyPartId]:
@@ -54,15 +54,17 @@ const OutfitsMap = ({ waypoint, data, statisticsActions }) => {
             }
           );
 
-          var statisticsAreaCircle = new window.ymaps.GeoObject({
-            geometry: {
-              type: "Circle",
-              coordinates: coordinates,
-              radius: STATISTICS_RADIUS_KM * 1000,
-            },
-          });
+          if (data.mostPopularOutift) {
+            var statisticsAreaCircle = new window.ymaps.GeoObject({
+              geometry: {
+                type: "Circle",
+                coordinates: coordinates,
+                radius: STATISTICS_RADIUS_KM * 1000,
+              },
+            });
+            mapRef.current.geoObjects.add(statisticsAreaCircle);
+          }
 
-          mapRef.current.geoObjects.add(statisticsAreaCircle);
           mapRef.current.geoObjects.add(outfitPlacemark);
 
           // mapRef.current.events.add("boundschange", onBoundsChange);

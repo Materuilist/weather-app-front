@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { STATISTICS_TYPES } from "../../../../constants";
 import Charts from "./charts/Charts";
 import OutfitPanel from "./maps/OutfitPanel";
 import OutfitsMap from "./maps/OutfitsMap";

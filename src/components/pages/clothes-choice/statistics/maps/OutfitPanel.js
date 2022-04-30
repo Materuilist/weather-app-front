@@ -8,12 +8,12 @@ const OutfitPanel = ({ statisticsData, statisticsActions }) => {
 
   const layerGarments = useMemo(
     () =>
-      statisticsData.mostPopularOutfit
+      (statisticsData.mostPopularOutfit || statisticsData.recommendedOutfit)
         .filter(({ layer }) => layer === displayLayer)
         .sort(
           (garmentA, garmentB) => garmentA.bodyPartId - garmentB.bodyPartId
         ),
-    [statisticsData.mostPopularOutfit, displayLayer]
+    [statisticsData, displayLayer]
   );
 
   return (
@@ -48,7 +48,7 @@ const OutfitPanel = ({ statisticsData, statisticsActions }) => {
             <div
               className="triangle triangle-reversed opacity-70-on-hover cursor-pointer"
               onClick={
-                displayLayer > 1
+                displayLayer > 0
                   ? () => setDisplayLayer(displayLayer - 1)
                   : null
               }

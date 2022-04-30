@@ -44,6 +44,12 @@ const ParametersForm = ({
             time,
             () => setIsLoading(false)
           );
+        case STATISTICS_TYPES.FORECAST:
+          return statisticsActions.getRecomendation(
+            moment(date).toDate(),
+            time,
+            () => setIsLoading(false)
+          );
         default:
           return;
       }
@@ -56,7 +62,8 @@ const ParametersForm = ({
 
   const isSubmitDisabled =
     statisticsType === STATISTICS_TYPES.TODAY ||
-    statisticsType === STATISTICS_TYPES.USUALLY
+    statisticsType === STATISTICS_TYPES.USUALLY ||
+    statisticsType === STATISTICS_TYPES.FORECAST
       ? !statisticsWaypoint
       : !selectedGarments.length ||
         waypointsData.some(
@@ -66,9 +73,9 @@ const ParametersForm = ({
   return (
     <div className="d-flex h-100 align-items-center">
       <Loader isLoading={isLoading} />
-      <Route
-        path={`${CLOTHES_CHOICE_ROUTES.STATISTICS}/${STATISTICS_TYPES.USUALLY}`}
-      >
+      {[STATISTICS_TYPES.USUALLY, STATISTICS_TYPES.FORECAST].includes(
+        statisticsType
+      ) && (
         <input
           className="form-control col-2"
           type="date"
@@ -77,7 +84,7 @@ const ParametersForm = ({
           min={moment().format("YYYY-MM-DD")}
           max={moment().add(1, "days").format("YYYY-MM-DD")}
         />
-      </Route>
+      )}
       <div className="col-3 d-flex align-items-center">
         <span className="mr-3">{getHoursMinutesString(time)}</span>
         <input

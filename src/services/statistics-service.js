@@ -22,6 +22,14 @@ class StatisticsService extends BaseService {
       body: JSON.stringify(body),
     });
   }
+  
+  getRecomendation(body) {
+    return this.request("get-recomendation", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  }
 }
 
 export default StatisticsService;
