@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import $ from "jquery";
 import OutfitRepresentation from "../../../../shared/OutfitRepresentation/OutfitRepresentation";
@@ -11,7 +11,7 @@ const SUCCESS_MESSAGE = "Great! Your outfit fits the weather perfectly.";
 const FAIL_MESSAGE = "Oops... Probably, you need to fix your outfit...";
 
 const AssessmentModal = ({ assessment, dressChoiceActions }) => {
-  const [currentOutfit, setCurrentOutfit] = useState(null);
+  const [currentOutfitIndex, setCurrentOutfitIndex] = useState(null);
   const [displayLayer, setDisplayLayer] = useState(1);
 
   useEffect(() => {
@@ -19,18 +19,37 @@ const AssessmentModal = ({ assessment, dressChoiceActions }) => {
       $("#assessmentModal").modal("show");
     } else {
       $("#assessmentModal").modal("hide");
-      setCurrentOutfit(null);
+      setCurrentOutfitIndex(null);
       return;
     }
 
     const { recomendations } = assessment;
 
     if (recomendations?.length) {
-      setCurrentOutfit(recomendations[0]);
+      setCurrentOutfitIndex(0);
     } else {
-      setCurrentOutfit(null);
+      setCurrentOutfitIndex(null);
     }
   }, [assessment]);
+
+  const overallOutfit = useMemo(
+    () =>
+      assessment?.recomendations?.[currentOutfitIndex]
+        ? Object.values(
+            assessment.recomendations[currentOutfitIndex].reduce(
+              (res, garment) => ({
+                ...res,
+                [garment.bodyPartId]:
+                  (res[garment.bodyPartId]?.layer ?? -1) < garment.layer
+                    ? garment
+                    : res[garment.bodyPartId],
+              }),
+              {}
+            )
+          )
+        : null,
+    [assessment, currentOutfitIndex]
+  );
 
   const onCancel = () => {
     $("#assessmentModal").modal("hide");
@@ -38,7 +57,9 @@ const AssessmentModal = ({ assessment, dressChoiceActions }) => {
 
   const onSubmit = () => {
     $("#assessmentModal").modal("hide");
-    dressChoiceActions.setSelectedGarments(currentOutfit);
+    dressChoiceActions.setSelectedGarments(
+      assessment.recomendations[currentOutfitIndex]
+    );
   };
 
   const isOutfitOk = Math.abs(assessment?.meanEstimation - 1) < VIABLE_DIFF;
@@ -53,6 +74,16 @@ const AssessmentModal = ({ assessment, dressChoiceActions }) => {
       : `You need to ${
           cloDiff > 0 ? "ease" : "insulate"
         } your outfit by ${Math.abs(cloDiff)} %`;
+  };
+
+  const navigaterOutfit = (step) => {
+    const newIndex = currentOutfitIndex + step;
+
+    if (newIndex < 0 || !assessment.recomendations[newIndex]) {
+      return;
+    }
+
+    setCurrentOutfitIndex(newIndex);
   };
 
   return (
@@ -79,15 +110,31 @@ const AssessmentModal = ({ assessment, dressChoiceActions }) => {
                 Probably, you could select from one of the recommended outfits:
               </p>
             )}
-            {currentOutfit ? (
+            {currentOutfitIndex != null ? (
               <div className="d-flex w-100 overflow-hidden">
-                <img className="col-6" src={getOutfitDataUrl(currentOutfit)} />
-                <OutfitView
-                  modifyOutfit={false}
-                  displayLayer={displayLayer}
-                  setDisplayLayer={setDisplayLayer}
-                  selectedGarments={currentOutfit}
-                />
+                <div className="d-flex justify-content-center align-items-center">
+                  <div
+                    className="triangle triangle-left opacity-70-on-hover cursor-pointer"
+                    onClick={() => navigaterOutfit(-1)}
+                  ></div>
+                </div>
+                <img className="col-5" src={getOutfitDataUrl(overallOutfit)} />
+                <div className="flex-grow-1">
+                  <OutfitView
+                    modifyOutfit={false}
+                    displayLayer={displayLayer}
+                    setDisplayLayer={setDisplayLayer}
+                    selectedGarments={
+                      assessment.recomendations[currentOutfitIndex]
+                    }
+                  />
+                </div>
+                <div className="d-flex justify-content-center align-items-center">
+                  <div
+                    className="triangle triangle-right opacity-70-on-hover cursor-pointer"
+                    onClick={() => navigaterOutfit(1)}
+                  ></div>
+                </div>
               </div>
             ) : (
               <p>Sorry, didn't manage to form recommendations</p>
