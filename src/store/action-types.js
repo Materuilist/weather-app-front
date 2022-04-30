@@ -1,5 +1,6 @@
 export const USER_ACTION_TYPES = {
   SET_USER: "SET_USER",
+  SET_USER_LOCATIONS: "SET_USER_LOCATIONS",
 };
 
 export const ALERTS_ACTION_TYPES = {

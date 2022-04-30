@@ -1,14 +1,16 @@
 import moment from "moment";
-import { DRESS_CHOICE_ACTIONS } from "../action-types";
+import { DRESS_CHOICE_ACTIONS, USER_ACTION_TYPES } from "../action-types";
 import GarmentService from "../../services/garment-service";
 import WeatherService from "../../services/weather-service";
 import ForecastService from "../../services/forecast-service";
+import LocationsService from "../../services/locations-service";
 import { GARMENT_SEX } from "../../constants";
 import { compareLocations } from "../../utils";
 
 const garmentService = new GarmentService();
 const weatherService = new WeatherService();
 const forecastService = new ForecastService();
+const locationsService = new LocationsService();
 
 const setAllGraments = (garments) => ({
   type: DRESS_CHOICE_ACTIONS.SET_ALL_GARMENTS,
@@ -23,6 +25,11 @@ export const setSelectedGarments = (selectedGarments) => ({
 const setAssessment = (assessment) => ({
   type: DRESS_CHOICE_ACTIONS.SET_ASSESSMENT,
   assessment,
+});
+
+const setUserLocations = (locations) => ({
+  type: USER_ACTION_TYPES.SET_USER_LOCATIONS,
+  locations,
 });
 
 export const getGarments = (cb) => async (dispatch, getState) => {
@@ -151,4 +158,10 @@ export const getWeather = (date, hour, cb) => async (dispatch, getState) => {
   dispatch(setAssessment({ meanEstimation, recomendations }));
 
   cb?.();
+};
+
+export const getUserLocations = (cb) => async (dispatch) => {
+  const { res: userLocations } = await locationsService.getUserFavorites();
+
+  dispatch(setUserLocations(userLocations));
 };

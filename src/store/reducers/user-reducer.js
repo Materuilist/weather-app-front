@@ -4,6 +4,7 @@ const initialState = {
   login: null,
   role: null,
   sex: null,
+  locations: [],
 };
 
 const userReducer = (state = initialState, action) => {
@@ -15,6 +16,8 @@ const userReducer = (state = initialState, action) => {
         role: action.role,
         sex: action.sex,
       };
+    case USER_ACTION_TYPES.SET_USER_LOCATIONS:
+      return { ...state, locations: action.locations };
     case SHARED_ACTION_TYPES.RESET_STORE:
       return initialState;
     default:

@@ -72,3 +72,11 @@
 .bg-light-blue {
   background-color: $lightBlue;
 }
+
+.bg-primary-on-hover {
+  &:hover {
+    background-color: $primary;
+  }
+
+  transition: background-color 0.1s linear;
+}
