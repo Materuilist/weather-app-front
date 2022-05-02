@@ -31,7 +31,7 @@ const OutfitsMap = ({ waypoint, data, statisticsActions }) => {
           );
 
           const garmentsToDisplay = Object.values(
-            data.recommendedOutfit.reduce(
+            (data.mostPopularOutfit || data.recommendedOutfit)?.reduce(
               (res, garment) => ({
                 ...res,
                 [garment.bodyPartId]:
@@ -54,7 +54,7 @@ const OutfitsMap = ({ waypoint, data, statisticsActions }) => {
             }
           );
 
-          if (data.mostPopularOutift) {
+          if (data.mostPopularOutfit) {
             var statisticsAreaCircle = new window.ymaps.GeoObject({
               geometry: {
                 type: "Circle",

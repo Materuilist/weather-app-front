@@ -27,6 +27,7 @@ const ParametersForm = ({
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [time, setTime] = useState(new Date().getHours() + 1);
   const [activity, setActivity] = useState(10);
+  const [radius, setRadius] = useState(50);
 
   const statisticsType = getStatisticsType(pathname);
 
@@ -36,13 +37,14 @@ const ParametersForm = ({
     if (statisticsType) {
       switch (statisticsType) {
         case STATISTICS_TYPES.TODAY:
-          return statisticsActions.getTodayStatistics(time, () =>
+          return statisticsActions.getTodayStatistics(time, radius, () =>
             setIsLoading(false)
           );
         case STATISTICS_TYPES.USUALLY:
           return statisticsActions.getAllTimeStatistics(
             moment(date).toDate(),
             time,
+            radius,
             () => setIsLoading(false)
           );
         case STATISTICS_TYPES.FORECAST:
@@ -90,7 +92,7 @@ const ParametersForm = ({
       <div className="col-3 d-flex align-items-center">
         <span className="mr-3">{getHoursMinutesString(time)}</span>
         <input
-          className=""
+          className="col"
           type="range"
           value={time}
           min={0}
@@ -99,6 +101,22 @@ const ParametersForm = ({
           onChange={({ target: { value } }) => setTime(+value)}
         />
       </div>
+      {[STATISTICS_TYPES.USUALLY, STATISTICS_TYPES.TODAY].includes(
+        statisticsType
+      ) && (
+        <div className="col-4 d-flex align-items-center">
+          <span className="ml-1 mr-1">Radius:</span>
+          <span className="ml-1 mr-3">{radius} km</span>
+          <input
+            className="col"
+            type="range"
+            value={radius}
+            onChange={({ target: { value } }) => setRadius(+value)}
+            min={50}
+            max={100}
+          />
+        </div>
+      )}
       {statisticsType === STATISTICS_TYPES.FORECAST && (
         <div className="col-3 d-flex align-items-center">
           <span className="ml-3">Activity:</span>

@@ -17,27 +17,28 @@ export const setData = (data) => ({
   data,
 });
 
-export const getTodayStatistics = (hour, cb) => async (dispatch, getState) => {
-  const timestamp = moment().set("hours", hour).toDate();
-  const {
-    statistics: {
-      waypoint: { coordinates },
-    },
-  } = getState();
+export const getTodayStatistics =
+  (hour, radius, cb) => async (dispatch, getState) => {
+    const timestamp = moment().set("hours", hour).toDate();
+    const {
+      statistics: {
+        waypoint: { coordinates },
+      },
+    } = getState();
 
-  const { res: statistics } = await statisticsService.getToday({
-    timestamp,
-    coordinates,
-    radius: STATISTICS_RADIUS_KM,
-  });
+    const { res: statistics } = await statisticsService.getToday({
+      timestamp,
+      coordinates,
+      radius,
+    });
 
-  dispatch(setData(statistics?.mostPopularOutfit ? statistics : null));
+    dispatch(setData(statistics?.mostPopularOutfit ? statistics : null));
 
-  cb?.();
-};
+    cb?.();
+  };
 
 export const getAllTimeStatistics =
-  (date, hour, cb) => async (dispatch, getState) => {
+  (date, hour, radius, cb) => async (dispatch, getState) => {
     const {
       statistics: {
         waypoint: { coordinates },
@@ -64,7 +65,7 @@ export const getAllTimeStatistics =
 
     const { res: statistics } = await statisticsService.getAllTime({
       coordinates,
-      radius: STATISTICS_RADIUS_KM,
+      radius,
       temp,
       windSpeed,
     });

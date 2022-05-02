@@ -101,6 +101,35 @@ export const changeWaypoints = (waypoints) => (dispatch, getState) => {
   dispatch(setWaypoints(waypoints));
 };
 
+export const selectFavorite =
+  (latitude, longitude, naming) => (dispatch, getState) => {
+    const {
+      dressChoice: { waypoints, waypointsData },
+    } = getState();
+
+    const newWaypoint = {
+      coordinates: [latitude, longitude],
+      index: waypoints.length,
+    };
+    const newWaypoints = [...waypoints, newWaypoint];
+    const newWaypointsData = [
+      ...waypointsData.filter(
+        ({ coordinates }) =>
+          !compareLocations(coordinates, [latitude, longitude])
+      ),
+      {
+        ...newWaypoint,
+        activity: 10,
+        addToFavorites: false,
+        isAlreadyFavorite: true,
+        naming,
+      },
+    ];
+
+    dispatch(setWaypointsData(newWaypointsData));
+    dispatch(setWaypoints(newWaypoints));
+  };
+
 export const setWaypointsData = (waypointsData) => ({
   type: DRESS_CHOICE_ACTIONS.SET_WAYPOINTS_DATA,
   waypointsData,

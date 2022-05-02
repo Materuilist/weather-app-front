@@ -9,15 +9,6 @@ const LocationForm = ({ waypointsData, isVisible, dressChoiceActions }) => {
   const [currentWaypointCoordinates, setCurrentWaypointCoordinates] =
     useState(null);
 
-  const currentWaypoint = useMemo(
-    () =>
-      currentWaypointCoordinates &&
-      waypointsData.find(({ coordinates }) =>
-        compareLocations(coordinates, currentWaypointCoordinates)
-      ),
-    [waypointsData, currentWaypointCoordinates]
-  );
-
   useEffect(() => {
     if (!currentWaypointCoordinates) {
       setCurrentWaypointCoordinates(waypointsData[0]?.coordinates);
@@ -33,6 +24,15 @@ const LocationForm = ({ waypointsData, isVisible, dressChoiceActions }) => {
       setCurrentWaypointCoordinates(null);
     }
   }, [waypointsData]);
+
+  const currentWaypoint = useMemo(
+    () =>
+      currentWaypointCoordinates &&
+      waypointsData.find(({ coordinates }) =>
+        compareLocations(coordinates, currentWaypointCoordinates)
+      ),
+    [waypointsData, currentWaypointCoordinates]
+  );
 
   const onDataChange = (value, field) => {
     dressChoiceActions.setWaypointsData(
@@ -97,23 +97,28 @@ const LocationForm = ({ waypointsData, isVisible, dressChoiceActions }) => {
               }
             />
           </div>
-          <div class="d-flex justify-content-center align-items-center p-2">
-            <label
-              class="mb-0 pl-0"
-              for={`${currentWaypoint.coordinates}Favorites`}
-            >
-              Add to favorites:
-            </label>
-            <input
-              type="checkbox"
-              class="ml-2"
-              id={`${currentWaypoint.coordinates}Favorites`}
-              checked={currentWaypoint.addToFavorites}
-              onChange={() =>
-                onDataChange(!currentWaypoint.addToFavorites, "addToFavorites")
-              }
-            />
-          </div>
+          {!currentWaypoint.isAlreadyFavorite && (
+            <div class="d-flex justify-content-center align-items-center p-2">
+              <label
+                class="mb-0 pl-0"
+                for={`${currentWaypoint.coordinates}Favorites`}
+              >
+                Add to favorites:
+              </label>
+              <input
+                type="checkbox"
+                class="ml-2"
+                id={`${currentWaypoint.coordinates}Favorites`}
+                checked={currentWaypoint.addToFavorites}
+                onChange={() =>
+                  onDataChange(
+                    !currentWaypoint.addToFavorites,
+                    "addToFavorites"
+                  )
+                }
+              />
+            </div>
+          )}
           {currentWaypoint.addToFavorites && (
             <input
               className="form-control"

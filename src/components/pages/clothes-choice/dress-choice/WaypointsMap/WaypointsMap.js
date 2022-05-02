@@ -45,6 +45,31 @@ const WaypointsMap = ({ waypoints, dressChoiceActions }) => {
     });
   }, []);
 
+  // when user selects favorite point
+  useEffect(() => {
+    const currentWaypoints = multiRouteRef.current?.getWayPoints();
+
+    if (!currentWaypoints) {
+      return;
+    }
+
+    const currentWaypointsMapped = [];
+
+    currentWaypoints.each((point) => {
+      const pointData = point.properties.getAll();
+
+      currentWaypointsMapped.push({
+        index: pointData.index,
+        coordinates: [...pointData.coordinates].reverse(),
+      });
+    });
+
+    if (currentWaypointsMapped.length !== waypoints.length)
+      multiRouteRef.current.model.setReferencePoints(
+        waypoints.map(({ coordinates }) => coordinates)
+      );
+  }, [waypoints]);
+
   const onWayPointsChange = () => {
     const newWaypoints = multiRouteRef.current.getWayPoints();
     const newWaypointsMapped = [];
@@ -58,7 +83,6 @@ const WaypointsMap = ({ waypoints, dressChoiceActions }) => {
       });
     });
 
-    console.log(newWaypointsMapped);
     dressChoiceActions.changeWaypoints(newWaypointsMapped);
   };
 

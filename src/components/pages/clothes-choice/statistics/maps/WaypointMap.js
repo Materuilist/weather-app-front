@@ -15,7 +15,7 @@ const WaypointMap = ({ waypoint, statisticsActions }) => {
           } = position;
 
           mapRef.current = new window.ymaps.Map("waypointMap", {
-            center: [latitude, longitude],
+            center: waypoint?.coordinates || [latitude, longitude],
             zoom: 9,
             controls: [],
           });
