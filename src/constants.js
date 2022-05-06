@@ -78,3 +78,5 @@ export const GARMENT_SEX = {
 };
 
 export const STATISTICS_RADIUS_KM = 25;
+
+export const PERM_LOCATION = [58.02701789270559, 56.02106965962186];
