@@ -193,4 +193,6 @@ export const getUserLocations = (cb) => async (dispatch) => {
   const { res: userLocations } = await locationsService.getUserFavorites();
 
   dispatch(setUserLocations(userLocations));
+
+  cb?.();
 };

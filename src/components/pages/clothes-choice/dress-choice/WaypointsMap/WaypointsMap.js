@@ -3,12 +3,14 @@ import { connect } from "react-redux";
 import { ALERT_TYPES, PERM_LOCATION } from "../../../../../constants";
 import mapDispatchToProps from "../../../../../store/actions";
 
+const MAX_WAYPOINTS_COUNT = 4;
+
 const WaypointsMap = ({ waypoints, dressChoiceActions, alertsActions }) => {
   const mapRef = useRef(null);
   const multiRouteRef = useRef(null);
   const regionsRef = useRef(null);
 
-  const previousReferencePointsRef = useRef([]);
+  const previousValidReferencePointsRef = useRef([]);
 
   useEffect(() => {
     window.ymaps.ready(() => {
@@ -31,9 +33,8 @@ const WaypointsMap = ({ waypoints, dressChoiceActions, alertsActions }) => {
             regions.addToMap(mapRef.current);
 
             regions.then(() => {
-              const currentRegionBorders = regions.searchIntersect(
-                mapRef.current
-              );
+              const currentRegionBorders =
+                regions.searchContaining(PERM_LOCATION);
               regions.removeFromMap(mapRef.current);
               currentRegionBorders.addToMap(mapRef.current);
               regionsRef.current = currentRegionBorders;
@@ -118,17 +119,36 @@ const WaypointsMap = ({ waypoints, dressChoiceActions, alertsActions }) => {
       });
     });
 
-    if (isInRegion) {
+    const isNoPoints =
+      isInRegion &&
+      previousValidReferencePointsRef.current.length &&
+      !newWaypointsMapped.length;
+    const isTooManyPoints =
+      isInRegion &&
+      previousValidReferencePointsRef.current.length &&
+      newWaypointsMapped.length > MAX_WAYPOINTS_COUNT;
+
+    const isValid = isInRegion && !isNoPoints && !isTooManyPoints;
+
+    if (isValid) {
       dressChoiceActions.changeWaypoints(newWaypointsMapped);
-      previousReferencePointsRef.current = newWaypointsMapped;
+      previousValidReferencePointsRef.current = newWaypointsMapped;
     } else {
       alertsActions.showAlert(
-        "You are not allowed to set points outside your region!",
+        !isInRegion
+          ? "You are not allowed to set points outside your region!"
+          : isNoPoints
+          ? "At least one point must exist!"
+          : `${MAX_WAYPOINTS_COUNT} is maximum amount of points available!`,
         ALERT_TYPES.ERROR
       );
-      multiRouteRef.current.model.setReferencePoints(
-        previousReferencePointsRef.current.map(({ coordinates }) => coordinates)
-      );
+      if (previousValidReferencePointsRef.current.length) {
+        multiRouteRef.current.model.setReferencePoints(
+          previousValidReferencePointsRef.current.map(
+            ({ coordinates }) => coordinates
+          )
+        );
+      }
     }
   };
 

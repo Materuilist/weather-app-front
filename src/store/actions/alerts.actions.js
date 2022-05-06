@@ -8,6 +8,12 @@ const setAlerts = (alerts) => ({
 
 export const showAlert = (text, type) => (dispatch, getState) => {
   const previousAlerts = getState().alerts;
+  const suchAlertExists = previousAlerts.some((alert) => alert.text === text);
+
+  if (suchAlertExists) {
+    return;
+  }
+
   const newAlertId =
     previousAlerts.reduce((maxId, { id }) => (id > maxId ? id : maxId), 0) + 1;
 
