@@ -26,6 +26,7 @@ const Designer = ({}) => {
   const addGarment = async (params) => {
     const addResult = await garmentService.addGarment(params);
     fetchGarments();
+    setGarmentDraft(null);
 
     return addResult;
   };

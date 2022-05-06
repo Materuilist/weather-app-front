@@ -38,7 +38,7 @@ export const RESPONSE_STATUSES = {
 
 export const ALERT_TYPES = {
   SUCCESS: "success",
-  ERROR: "error",
+  ERROR: "danger",
   INFO: "info",
 };
 

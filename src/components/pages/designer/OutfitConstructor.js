@@ -6,18 +6,22 @@ import GarmentSlot from "../../shared/GarmentSlot/GarmentSlot.js";
 
 import ToolPanel from "./ToolPanel";
 
+const DEFAULT_GARMENT_PARAMETERS = {
+  clo: 0.18,
+  layer: 1,
+  naming: "",
+  sex: null,
+};
+
 const OutfitConstructor = ({ setIsLoading, garmentDraft, addGarment }) => {
   const [selectedBodyPartId, setSelectedBodyPartId] = useState(null);
   const [thickness, setThickness] = useState(1);
   const [color, setColor] = useState("#000");
   const [isErase, setIsErase] = useState(false);
   const [backgroundImage, setBackgroundImage] = useState(null);
-  const [garmentParameters, setGarmentParameters] = useState({
-    clo: 0.18,
-    layer: 1,
-    naming: "",
-    sex: null,
-  });
+  const [garmentParameters, setGarmentParameters] = useState(
+    DEFAULT_GARMENT_PARAMETERS
+  );
 
   const drawerRef = useRef();
 
@@ -45,7 +49,11 @@ const OutfitConstructor = ({ setIsLoading, garmentDraft, addGarment }) => {
       saveData: areLinesDrawn ? saveData : null,
       bodyPartId: selectedBodyPartId,
     });
-    console.log(id);
+
+    setBackgroundImage(null);
+    setGarmentParameters(DEFAULT_GARMENT_PARAMETERS);
+    setSelectedBodyPartId(null);
+    drawerRef.current?.clear();
 
     setIsLoading(false);
   };
@@ -53,6 +61,8 @@ const OutfitConstructor = ({ setIsLoading, garmentDraft, addGarment }) => {
   useEffect(() => {
     if (garmentDraft?.saveData) {
       drawerRef.current.loadSaveData(garmentDraft.saveData);
+    } else {
+      drawerRef.current?.clear();
     }
   }, [garmentDraft]);
 

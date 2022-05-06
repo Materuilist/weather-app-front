@@ -7,7 +7,6 @@ const setAlerts = (alerts) => ({
 });
 
 export const showAlert = (text, type) => (dispatch, getState) => {
-  console.log(getState());
   const previousAlerts = getState().alerts;
   const newAlertId =
     previousAlerts.reduce((maxId, { id }) => (id > maxId ? id : maxId), 0) + 1;

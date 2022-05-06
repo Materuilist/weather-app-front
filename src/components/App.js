@@ -10,6 +10,7 @@ import Loader from "./shared/Loader/Loader";
 
 import "./app.scss";
 import ClothesChoice from "./pages/clothes-choice/ClothesChoice";
+import Alerts from "./shared/Alerts/Alerts";
 
 function App({ user, authActions }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -48,6 +49,7 @@ function App({ user, authActions }) {
           />
         </Switch>
       )}
+      <Alerts />
     </div>
   );
 }
