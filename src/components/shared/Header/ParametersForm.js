@@ -32,25 +32,45 @@ const ParametersForm = ({
   const statisticsType = getStatisticsType(pathname);
 
   const onSubmit = () => {
+    let isActualDate = true;
+    let validTime = time;
+
+    if (
+      !statisticsType ||
+      [STATISTICS_TYPES.USUALLY, STATISTICS_TYPES.FORECAST].includes(
+        statisticsType
+      )
+    ) {
+      isActualDate = new Date(date).getDate() === new Date().getDate();
+    }
+
+    if (isActualDate) {
+      const actualHour = new Date().getHours();
+      if (actualHour > time) {
+        validTime = actualHour;
+        setTime(validTime);
+      }
+    }
+
     setIsLoading(true);
 
     if (statisticsType) {
       switch (statisticsType) {
         case STATISTICS_TYPES.TODAY:
-          return statisticsActions.getTodayStatistics(time, radius, () =>
+          return statisticsActions.getTodayStatistics(validTime, radius, () =>
             setIsLoading(false)
           );
         case STATISTICS_TYPES.USUALLY:
           return statisticsActions.getAllTimeStatistics(
             moment(date).toDate(),
-            time,
+            validTime,
             radius,
             () => setIsLoading(false)
           );
         case STATISTICS_TYPES.FORECAST:
           return statisticsActions.getRecomendation(
             moment(date).toDate(),
-            time,
+            validTime,
             activity,
             () => setIsLoading(false)
           );
@@ -58,7 +78,7 @@ const ParametersForm = ({
           return;
       }
     } else {
-      dressChoiceActions.getWeather(moment(date).toDate(), time, () =>
+      dressChoiceActions.getWeather(moment(date).toDate(), validTime, () =>
         setIsLoading(false)
       );
     }

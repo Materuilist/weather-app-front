@@ -1,8 +1,9 @@
 import moment from "moment";
-import { STATISTICS_RADIUS_KM } from "../../constants";
+import { ALERT_TYPES, STATISTICS_RADIUS_KM } from "../../constants";
 import StatisticsService from "../../services/statistics-service";
 import WeatherService from "../../services/weather-service";
 import { STATISTICS_ACTIONS } from "../action-types";
+import * as alertsActions from "./alerts.actions";
 
 const statisticsService = new StatisticsService();
 const weatherService = new WeatherService();
@@ -33,6 +34,11 @@ export const getTodayStatistics =
     });
 
     dispatch(setData(statistics?.mostPopularOutfit ? statistics : null));
+    if (!statistics?.mostPopularOutfit) {
+      dispatch(
+        alertsActions.showAlert("No statistics yet!", ALERT_TYPES.ERROR)
+      );
+    }
 
     cb?.();
   };
@@ -71,6 +77,11 @@ export const getAllTimeStatistics =
     });
 
     dispatch(setData(statistics?.mostPopularOutfit ? statistics : null));
+    if (!statistics?.mostPopularOutfit) {
+      dispatch(
+        alertsActions.showAlert("No statistics yet!", ALERT_TYPES.ERROR)
+      );
+    }
 
     cb?.();
   };
