@@ -19,6 +19,7 @@ const ParametersForm = ({
   selectedGarments,
   waypointsData,
   statisticsWaypoint,
+  statisticsData,
   dressChoiceActions,
   statisticsActions,
   location: { pathname },
@@ -88,7 +89,8 @@ const ParametersForm = ({
     statisticsType === STATISTICS_TYPES.TODAY ||
     statisticsType === STATISTICS_TYPES.USUALLY ||
     statisticsType === STATISTICS_TYPES.FORECAST
-      ? !statisticsWaypoint
+      ? (statisticsData && Object.keys(statisticsData).length) ||
+        !statisticsWaypoint
       : !selectedGarments.length ||
         waypointsData.some(
           ({ addToFavorites, naming }) => addToFavorites && !naming
@@ -183,13 +185,14 @@ const ParametersForm = ({
 
 const mapStateToProps = ({
   dressChoice: { selectedGarments, waypointsData },
-  statistics: { waypoint: statisticsWaypoint },
+  statistics: { waypoint: statisticsWaypoint, data: statisticsData },
   router: { location },
 }) => ({
   selectedGarments,
   waypointsData,
   location,
   statisticsWaypoint,
+  statisticsData,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParametersForm);
