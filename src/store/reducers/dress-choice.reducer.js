@@ -27,6 +27,7 @@ const dressChoiceReducer = (state = initialState, action) => {
         isLocationDataPanelVisible: action.isLocationDataPanelVisible,
       };
     case SHARED_ACTION_TYPES.RESET_STORE:
+    case SHARED_ACTION_TYPES.LOCATION_CHANGE:
       return initialState;
     default:
       return state;

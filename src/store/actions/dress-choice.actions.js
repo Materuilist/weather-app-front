@@ -85,17 +85,16 @@ export const changeWaypoints = (waypoints) => (dispatch, getState) => {
     dressChoice: { waypointsData },
   } = getState();
 
-  const newWaypointsData = waypoints.map(
-    (waypoint) =>
-      waypointsData.find(({ coordinates }) =>
-        compareLocations(coordinates, waypoint.coordinates)
-      ) || {
-        ...waypoint,
-        activity: 10,
-        addToFavorites: false,
-        naming: "",
-      }
-  );
+  const newWaypointsData = waypoints.map((waypoint) => ({
+    ...waypoint,
+    activity: 10,
+    addToFavorites: false,
+    naming: "",
+    ...waypointsData.find(({ coordinates }) =>
+      compareLocations(coordinates, waypoint.coordinates)
+    ),
+    index: waypoint.index,
+  }));
 
   dispatch(setWaypointsData(newWaypointsData));
   dispatch(setWaypoints(waypoints));
