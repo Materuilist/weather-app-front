@@ -5,6 +5,11 @@ import OutfitRepresentation from "../../../../shared/OutfitRepresentation/Outfit
 import OutfitView from "../OutfitView";
 import mapDispatchToProps from "../../../../../store/actions";
 import { getOutfitDataUrl } from "../../../../../utils";
+import { NavLink } from "react-router-dom";
+import {
+  CLOTHES_CHOICE_ROUTES,
+  STATISTICS_TYPES,
+} from "../../../../../constants";
 
 const VIABLE_DIFF = 0.1;
 const SUCCESS_MESSAGE = "Great! Your outfit fits the weather perfectly.";
@@ -103,14 +108,14 @@ const AssessmentModal = ({ assessment, dressChoiceActions }) => {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body d-flex flex-column height-60-vh">
+          <div class="modal-body d-flex flex-column max-height-60-vh">
             <p>{getEstimationMessage()}</p>
             {!isOutfitOk && (
               <p>
                 Probably, you could select from one of the recommended outfits:
               </p>
             )}
-            {currentOutfitIndex != null ? (
+            {currentOutfitIndex != null && overallOutfit ? (
               <div className="d-flex w-100 overflow-hidden">
                 <div className="d-flex justify-content-center align-items-center">
                   <div
@@ -136,7 +141,7 @@ const AssessmentModal = ({ assessment, dressChoiceActions }) => {
                   ></div>
                 </div>
               </div>
-            ) : (
+            ) : isOutfitOk ? null : (
               <p>Sorry, didn't manage to form recommendations</p>
             )}
           </div>
@@ -149,9 +154,19 @@ const AssessmentModal = ({ assessment, dressChoiceActions }) => {
             >
               Close
             </button>
-            <button type="button" class="btn btn-primary" onClick={onSubmit}>
-              Select outfit
-            </button>
+            {isOutfitOk ? (
+              <NavLink
+                to={`${CLOTHES_CHOICE_ROUTES.STATISTICS}/${STATISTICS_TYPES.USUALLY}`}
+                onClick={() => $("#assessmentModal").modal("hide")}
+                className="btn btn-primary"
+              >
+                Check other user outfits
+              </NavLink>
+            ) : (
+              <button type="button" class="btn btn-primary" onClick={onSubmit}>
+                Select outfit
+              </button>
+            )}
           </div>
         </div>
       </div>
